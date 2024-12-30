@@ -1,0 +1,27 @@
+# permissions for end users to edit cronjoblabelconfigs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: dr-cronjob-crd
+    app.kubernetes.io/managed-by: kustomize
+  name: cronjoblabelconfig-editor-role
+rules:
+- apiGroups:
+  - batch.104corp.org
+  resources:
+  - cronjoblabelconfigs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - batch.104corp.org
+  resources:
+  - cronjoblabelconfigs/status
+  verbs:
+  - get

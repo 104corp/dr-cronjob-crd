@@ -1,0 +1,9 @@
+apiVersion: batch.104corp.org/v1
+kind: CronJobLabelConfig
+metadata:
+  labels:
+    app.kubernetes.io/name: dr-cronjob-crd
+    app.kubernetes.io/managed-by: kustomize
+  name: cronjoblabelconfig-sample
+spec:
+  # TODO(user): Add fields here

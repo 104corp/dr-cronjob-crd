@@ -1,0 +1,23 @@
+# permissions for end users to view cronjoblabelconfigs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: dr-cronjob-crd
+    app.kubernetes.io/managed-by: kustomize
+  name: cronjoblabelconfig-viewer-role
+rules:
+- apiGroups:
+  - batch.104corp.org
+  resources:
+  - cronjoblabelconfigs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - batch.104corp.org
+  resources:
+  - cronjoblabelconfigs/status
+  verbs:
+  - get
