@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/runtime"
 
 	appv1 "104corp.org/dr-cronjob-crd/api/v1"
 	batchv1 "k8s.io/api/batch/v1"
@@ -30,6 +31,7 @@ import (
 // CronJobLabelConfigReconciler reconciles a CronJobLabelConfig object
 type CronJobLabelConfigReconciler struct {
 	client.Client
+	Scheme *runtime.Scheme
 }
 
 // +kubebuilder:rbac:groups=batch.104corp.org,resources=cronjoblabelconfigs,verbs=get;list;watch;create;update;patch;delete
