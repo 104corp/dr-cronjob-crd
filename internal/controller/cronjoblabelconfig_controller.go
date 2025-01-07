@@ -17,13 +17,12 @@ limitations under the License.
 package controller
 
 import (
+	appv1 "104corp.org/dr-cronjob-crd/api/v1"
 	"context"
 	"fmt"
+	batchv1 "k8s.io/api/batch/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
-
-	appv1 "104corp.org/dr-cronjob-crd/api/v1"
-	batchv1 "k8s.io/api/batch/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -48,6 +47,10 @@ type CronJobLabelConfigReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.19.1/pkg/reconcile
 func (r *CronJobLabelConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	log := ctrl.Log.WithValues("cronjoblabelconfig", req.NamespacedName)
+
+	log.Info("Reconciling CronJobLabelConfig")
+	// 獲取 CronJobLabelConfig 資源
 	var config appv1.CronJobLabelConfig
 	if err := r.Get(ctx, req.NamespacedName, &config); err != nil {
 		if errors.IsNotFound(err) {
@@ -71,26 +74,20 @@ func (r *CronJobLabelConfigReconciler) Reconcile(ctx context.Context, req ctrl.R
 			labels = make(map[string]string)
 		}
 
-		// 根據 EnableCleanup 決定是否加上/移除標籤
 		if config.Spec.EnableCleanup {
-			if labels["cleanup"] != "true" {
-				labels["cleanup"] = "true"
-				cronJob.SetLabels(labels)
-				if err := r.Update(ctx, &cronJob); err != nil {
-					return ctrl.Result{}, err
-				}
-			}
+			labels["cleanup"] = "true"
 		} else {
-			if _, exists := labels["cleanup"]; exists {
-				delete(labels, "cleanup")
-				cronJob.SetLabels(labels)
-				if err := r.Update(ctx, &cronJob); err != nil {
-					return ctrl.Result{}, err
-				}
-			}
+			delete(labels, "cleanup")
+		}
+		cronJob.SetLabels(labels)
+		cronJob.Spec.JobTemplate.ObjectMeta.Labels = labels
+
+		if err := r.Update(ctx, &cronJob); err != nil {
+			log.Error(err, "Failed to update CronJob labels", "CronJob", cronJob.Name)
+			return ctrl.Result{}, err
 		}
 
-		syncedCount++
+		log.Info("Updated CronJob", "name", cronJob.Name, "labels", labels)
 	}
 
 	// 更新 Status
