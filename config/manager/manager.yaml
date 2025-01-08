@@ -64,7 +64,7 @@ spec:
           - --leader-elect
           - --health-probe-bind-address=:8081
         #image: controller:latest
-        image: ghcr.io/104corp/dr-cronjob-controller:v1
+        image: ghcr.io/104corp/dr-cronjob-controller:v2
         name: manager
         securityContext:
           allowPrivilegeEscalation: false
