@@ -1,32 +1,51 @@
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: manager-role
 rules:
-- apiGroups:
-  - batch.104corp.org
-  resources:
-  - cronjoblabelconfigs
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - batch.104corp.org
-  resources:
-  - cronjoblabelconfigs/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - batch.104corp.org
-  resources:
-  - cronjoblabelconfigs/status
-  verbs:
-  - get
-  - patch
-  - update
+  - apiGroups:
+      - batch.104corp.org
+    resources:
+      - cronjoblabelconfigs
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - batch.104corp.org
+    resources:
+      - cronjoblabelconfigs/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - batch.104corp.org
+    resources:
+      - cronjoblabelconfigs/status
+    verbs:
+      - get
+      - patch
+      - update
+  # 新增對 CronJob 的權限
+  - apiGroups:
+      - batch
+    resources:
+      - cronjobs
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+  # 新增對 Job 的權限（如果需要操作 Job）
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+    verbs:
+      - get
+      - list
+      - watch
+      - update
