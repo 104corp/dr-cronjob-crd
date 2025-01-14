@@ -1,0 +1,8 @@
+apiVersion: batch.104corp.org/v1
+kind: CronJobLabelConfig
+metadata:
+  name: test-config
+  namespace: x-104se-ap-2949
+spec:
+  enableCleanup: true
+
