@@ -29,21 +29,11 @@ rules:
       - get
       - patch
       - update
-  # 新增對 CronJob 的權限
+  # 添加對 CronJob 資源的權限
   - apiGroups:
-      - batch
+    - batch
     resources:
-      - cronjobs
-    verbs:
-      - get
-      - list
-      - watch
-      - update
-  # 新增對 Job 的權限（如果需要操作 Job）
-  - apiGroups:
-      - batch
-    resources:
-      - jobs
+    - cronjobs
     verbs:
       - get
       - list
